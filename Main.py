@@ -1,6 +1,7 @@
 import sys
 
-from PySide6.QtCore import Qt
+from Body import Body
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import (
     QAbstractSpinBox,
     QApplication,
@@ -19,6 +20,12 @@ class HeatTransfer(QWidget):
         super().__init__()
 
         self.setWindowTitle("Heat Transfer")
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.timer_method)
+
+        self.left_body = None
+        self.right_body = None
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
@@ -59,8 +66,10 @@ class HeatTransfer(QWidget):
         self.left_temperature.setRange(0,200)
         self.left_mass = QDoubleSpinBox()
         self.left_mass.setRange(1,100)
+        self.left_mass.setValue(100)
         self.left_heat_capacity = QDoubleSpinBox()
         self.left_heat_capacity.setRange(0.1,999)
+        self.left_heat_capacity.setValue(2)
         self.left_temperature_label = QLabel("Temp.")
         self.left_mass_label = QLabel("Mass.")
         self.left_heat_capacity_label = QLabel("H. Cap.")
@@ -112,9 +121,8 @@ class HeatTransfer(QWidget):
 
         self.start_button = QPushButton("Start")
         self.start_button.setCheckable(True)
-        self.start_button.toggled.connect(
-            lambda checked: self.start_button.setText("Stop" if checked else "Start")
-        )
+        self.start_button.toggled.connect(self.start_stop_button_method)
+
         self.graphs_button = QPushButton("Graphs")
         self.about_button = QPushButton("About")
         for button in (self.start_button, self.graphs_button, self.about_button):
@@ -140,8 +148,10 @@ class HeatTransfer(QWidget):
         self.right_temperature.setRange(0,200)
         self.right_mass = QDoubleSpinBox()
         self.right_mass.setRange(1,100)
+        self.right_mass.setValue(100)
         self.right_heat_capacity = QDoubleSpinBox()
         self.right_heat_capacity.setRange(0.1,999)
+        self.right_heat_capacity.setValue(2)
 
         self.left_mass.setSuffix(" kg")
         self.left_heat_capacity.setSuffix(" J/Kg\u00b0C")
@@ -201,13 +211,47 @@ class HeatTransfer(QWidget):
         layout.setAlignment(center_layout, Qt.AlignmentFlag.AlignTop)
         layout.addLayout(right_layout)
 
+        self.left_slider.setValue(255)
+
     def left_temperature_changed(self):
         value = self.left_slider.value()
+        self.left_temperature.setValue(self.slider_value_to_celsius(value))
         self.left_box.setStyleSheet(f'background-color:rgb({value},0,0)')
 
     def right_temperature_changed(self):
         value = self.right_slider.value()
+        self.right_temperature.setValue(self.slider_value_to_celsius(value))
         self.right_box.setStyleSheet(f'background-color:rgb({value},0,0)')
+
+    def slider_value_to_celsius(self, value: int) -> float:
+        return value * 200 / 255
+
+    def celsius_to_slider_value(self, temperature: float) -> int:
+        return round(temperature * 255 / 200)
+
+    def start_stop_button_method(self, checked: bool):
+        self.start_button.setText("Stop" if checked else "Start")
+        if checked:
+            self.left_body = Body(self.left_mass.value(), self.left_heat_capacity.value(), self.left_temperature.value())
+            self.right_body = Body(self.right_mass.value(), self.right_heat_capacity.value(), self.right_temperature.value())
+            self.timer.start(100)
+        else:
+            self.timer.stop()
+
+    def timer_method(self):
+
+        i1 = self.conductivity.value()*(self.right_body.temperature-self.left_body.temperature)
+        i2 = i1*(-1)
+        self.left_body.add_heat(i1)
+        self.right_body.add_heat(i2)
+        
+        self.left_slider.setValue(self.celsius_to_slider_value(self.left_body.temperature))
+        self.right_slider.setValue(self.celsius_to_slider_value(self.right_body.temperature))
+        self.left_temperature.setValue(self.left_body.temperature)
+        self.right_temperature.setValue(self.right_body.temperature)
+      
+
+
 
 
 def main() -> int:
