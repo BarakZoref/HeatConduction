@@ -26,21 +26,25 @@ class HeatTransfer(QWidget):
 
         self.left_slider = QSlider(Qt.Orientation.Vertical)
         self.left_slider.setMinimumHeight(140)
+        self.left_slider.setRange(0,255)
+        self.left_slider.valueChanged.connect(self.left_temperature_changed)
 
         self.left_box = QLabel()
         self.left_box.setFixedSize(120, 120)
-        self.left_box.setStyleSheet("border: 2px solid #333; background-color: #ddd;")
+        self.left_box.setStyleSheet("border: 2px solid #333; background-color: rgb(0,0,0);")
 
         self.connection = QLabel()
         self.connection.setFixedSize(200, 32)
-        self.connection.setStyleSheet("border: 2px solid #333; background-color: #eee;")
+        self.connection.setStyleSheet("border: 2px solid #333; background-color: lightgray;")
 
         self.right_box = QLabel()
         self.right_box.setFixedSize(120, 120)
-        self.right_box.setStyleSheet("border: 2px solid #333; background-color: #ddd;")
+        self.right_box.setStyleSheet("border: 2px solid #333; background-color:rgb(0,0,0);")
 
         self.right_slider = QSlider(Qt.Orientation.Vertical)
         self.right_slider.setMinimumHeight(140)
+        self.right_slider.setRange(0,255)
+        self.right_slider.valueChanged.connect(self.right_temperature_changed)
 
         left_layout = QVBoxLayout()
         left_layout.setSpacing(8)
@@ -196,6 +200,14 @@ class HeatTransfer(QWidget):
         layout.addLayout(center_layout)
         layout.setAlignment(center_layout, Qt.AlignmentFlag.AlignTop)
         layout.addLayout(right_layout)
+
+    def left_temperature_changed(self):
+        value = self.left_slider.value()
+        self.left_box.setStyleSheet(f'background-color:rgb({value},0,0)')
+
+    def right_temperature_changed(self):
+        value = self.right_slider.value()
+        self.right_box.setStyleSheet(f'background-color:rgb({value},0,0)')
 
 
 def main() -> int:
