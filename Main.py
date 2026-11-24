@@ -52,8 +52,11 @@ class HeatTransfer(QWidget):
         left_layout.addLayout(left_top_layout)
 
         self.left_temperature = QDoubleSpinBox()
+        self.left_temperature.setRange(0,200)
         self.left_mass = QDoubleSpinBox()
+        self.left_mass.setRange(1,100)
         self.left_heat_capacity = QDoubleSpinBox()
+        self.left_heat_capacity.setRange(0.1,999)
         self.left_temperature_label = QLabel("Temp.")
         self.left_mass_label = QLabel("Mass.")
         self.left_heat_capacity_label = QLabel("H. Cap.")
@@ -92,6 +95,7 @@ class HeatTransfer(QWidget):
         self.conductivity_label = QLabel("Conductivity")
         self.conductivity_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.conductivity = QDoubleSpinBox()
+        self.conductivity.setRange(1,100)
         self.conductivity.setSuffix(" J/s\u00b0C")
         self.conductivity.setFixedWidth(90)
         center_layout.addWidget(
@@ -129,8 +133,12 @@ class HeatTransfer(QWidget):
         right_layout.addLayout(right_top_layout)
 
         self.right_temperature = QDoubleSpinBox()
+        self.right_temperature.setRange(0,200)
         self.right_mass = QDoubleSpinBox()
+        self.right_mass.setRange(1,100)
         self.right_heat_capacity = QDoubleSpinBox()
+        self.right_heat_capacity.setRange(0.1,999)
+
         self.left_mass.setSuffix(" kg")
         self.left_heat_capacity.setSuffix(" J/Kg\u00b0C")
         self.right_mass.setSuffix(" kg")
