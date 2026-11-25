@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
 
 
 class GraphWindow(QWidget):
-    def __init__(self):
+    def __init__(self, main_window = None):
         super().__init__()
 
         self.setWindowTitle("Graph")

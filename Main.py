@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from GraphWindow import GraphWindow
 
 
 class HeatTransfer(QWidget):
@@ -20,6 +21,8 @@ class HeatTransfer(QWidget):
         super().__init__()
 
         self.setWindowTitle("Heat Transfer")
+
+        self.graph_window = GraphWindow(self)
 
         self.body1_temp_history = []
         self.body2_temp_history = []
@@ -128,15 +131,16 @@ class HeatTransfer(QWidget):
         self.start_button.setCheckable(True)
         self.start_button.toggled.connect(self.start_stop_button_method)
 
-        self.graphs_button = QPushButton("Graphs")
+        self.graph_button = QPushButton("Graph")
+        self.graph_button.clicked.connect(self.graph_clicked_method)
         self.about_button = QPushButton("About")
-        for button in (self.start_button, self.graphs_button, self.about_button):
+        for button in (self.start_button, self.graph_button, self.about_button):
             button.setFixedSize(90, self.left_temperature.sizeHint().height())
 
         center_layout.addSpacing(73)
         center_layout.addWidget(self.start_button, 0, Qt.AlignmentFlag.AlignHCenter)
         center_layout.addSpacing(8)
-        center_layout.addWidget(self.graphs_button, 0, Qt.AlignmentFlag.AlignHCenter)
+        center_layout.addWidget(self.graph_button, 0, Qt.AlignmentFlag.AlignHCenter)
         center_layout.addSpacing(8)
         center_layout.addWidget(self.about_button, 0, Qt.AlignmentFlag.AlignHCenter)
 
@@ -277,12 +281,15 @@ class HeatTransfer(QWidget):
         print(self.time_history)
 
         print("---------------------")
-        
+
     def reboot_values(self):
         self.body1_temp_history = []
         self.body2_temp_history = []
         self.current_time = 0
         self.time_history = [0]
+
+    def graph_clicked_method(self):
+        self.graph_window.show()
       
 
 
