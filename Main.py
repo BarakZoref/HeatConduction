@@ -26,7 +26,7 @@ class HeatTransfer(QWidget):
 
         self.body1_temp_history = []
         self.body2_temp_history = []
-        self.time_history = [0]
+        self.time_history = []
         self.current_time = 0
 
         self.timer = QTimer(self)
@@ -241,15 +241,17 @@ class HeatTransfer(QWidget):
     def start_stop_button_method(self, checked: bool):
         self.start_button.setText("Stop" if checked else "Start")
         if checked:
+            self.reboot_values()
             self.left_body = Body(self.left_mass.value(), self.left_heat_capacity.value(), self.left_temperature.value())
             self.right_body = Body(self.right_mass.value(), self.right_heat_capacity.value(), self.right_temperature.value())
 
+            self.time_history.append(self.current_time)
             self.body1_temp_history.append(self.left_body.temperature)
             self.body2_temp_history.append(self.right_body.temperature)
-            
+
+            self.graph_window.update_graph()
             self.timer.start(1000)
         else:
-            self.reboot_values()
             self.timer.stop()
 
     def timer_method(self):
@@ -269,11 +271,11 @@ class HeatTransfer(QWidget):
 
         self.current_time+=1
         self.time_history.append(self.current_time)
+        self.graph_window.update_graph()
 
         if self.current_time == 10:
             self.timer.stop()
             self.start_button.setChecked(False)
-            self.reboot_values()
 
 
         print(self.body1_temp_history)
@@ -286,7 +288,7 @@ class HeatTransfer(QWidget):
         self.body1_temp_history = []
         self.body2_temp_history = []
         self.current_time = 0
-        self.time_history = [0]
+        self.time_history = []
 
     def graph_clicked_method(self):
         self.graph_window.show()
