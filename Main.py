@@ -21,6 +21,11 @@ class HeatTransfer(QWidget):
 
         self.setWindowTitle("Heat Transfer")
 
+        self.body1_temp_history = []
+        self.body2_temp_history = []
+        self.time_history = [0]
+        self.current_time = 0
+
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.timer_method)
 
@@ -234,8 +239,13 @@ class HeatTransfer(QWidget):
         if checked:
             self.left_body = Body(self.left_mass.value(), self.left_heat_capacity.value(), self.left_temperature.value())
             self.right_body = Body(self.right_mass.value(), self.right_heat_capacity.value(), self.right_temperature.value())
-            self.timer.start(100)
+
+            self.body1_temp_history.append(self.left_body.temperature)
+            self.body2_temp_history.append(self.right_body.temperature)
+            
+            self.timer.start(1000)
         else:
+            self.reboot_values()
             self.timer.stop()
 
     def timer_method(self):
@@ -249,6 +259,30 @@ class HeatTransfer(QWidget):
         self.right_slider.setValue(self.celsius_to_slider_value(self.right_body.temperature))
         self.left_temperature.setValue(self.left_body.temperature)
         self.right_temperature.setValue(self.right_body.temperature)
+
+        self.body1_temp_history.append(self.left_body.temperature)
+        self.body2_temp_history.append(self.right_body.temperature)
+
+        self.current_time+=1
+        self.time_history.append(self.current_time)
+
+        if self.current_time == 10:
+            self.timer.stop()
+            self.start_button.setChecked(False)
+            self.reboot_values()
+
+
+        print(self.body1_temp_history)
+        print(self.body2_temp_history)
+        print(self.time_history)
+
+        print("---------------------")
+        
+    def reboot_values(self):
+        self.body1_temp_history = []
+        self.body2_temp_history = []
+        self.current_time = 0
+        self.time_history = [0]
       
 
 
