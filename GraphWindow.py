@@ -1,5 +1,8 @@
 import sys
 
+import csv
+import os
+
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from PySide6.QtWidgets import (
@@ -40,6 +43,7 @@ class GraphWindow(QWidget):
         self.clear_button = QPushButton("Clear")
         self.clear_button.clicked.connect(self.clear_graph)
         self.export_button = QPushButton("Export to CSV")
+        self.export_button.clicked.connect(self.export_to_csv)
         for control in (
             self.graph_type_combo,
             self.draw_button,
@@ -97,6 +101,21 @@ class GraphWindow(QWidget):
         self.drawn_bodies.add("Body2")
         self._set_body_line(self.body2_line, self.main_window.body2_temp_history)
         self.graph_canvas.draw_idle()
+
+    def export_to_csv(self):
+        filename = "heat_transfer_results.csv"
+        
+        with open(filename, mode="w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            
+            writer.writerow(["Time (s)", "Body 1 Temp (C)", "Body 2 Temp (C)"])
+            
+            for t, t1, t2 in zip(self.main_window.time_history, 
+                                self.main_window.body1_temp_history, 
+                                self.main_window.body2_temp_history):
+                writer.writerow([t, t1, t2])
+                
+        os.startfile(filename)
 
 
 def main() -> int:
