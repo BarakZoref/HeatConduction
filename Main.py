@@ -15,12 +15,16 @@ from PySide6.QtWidgets import (
 )
 from GraphWindow import GraphWindow
 
+from About import AboutWindow
+
 
 class HeatTransfer(QWidget):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Heat Transfer")
+
+        self.about_window = AboutWindow()
 
         self.graph_window = GraphWindow(self)
 
@@ -116,6 +120,7 @@ class HeatTransfer(QWidget):
         self.conductivity_label = QLabel("Conductivity")
         self.conductivity_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.conductivity = QDoubleSpinBox()
+        self.conductivity.setValue(10)
         self.conductivity.setRange(1,100)
         self.conductivity.setSuffix(" J/s\u00b0C")
         self.conductivity.setFixedWidth(90)
@@ -134,6 +139,7 @@ class HeatTransfer(QWidget):
         self.graph_button = QPushButton("Graph")
         self.graph_button.clicked.connect(self.graph_clicked_method)
         self.about_button = QPushButton("About")
+        self.about_button.clicked.connect(self.about_clicked)
         for button in (self.start_button, self.graph_button, self.about_button):
             button.setFixedSize(90, self.left_temperature.sizeHint().height())
 
@@ -292,7 +298,10 @@ class HeatTransfer(QWidget):
 
     def graph_clicked_method(self):
         self.graph_window.show()
-      
+
+    def about_clicked(self):
+        self.about_window.show()
+    
 
 
 
