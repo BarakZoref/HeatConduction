@@ -1,0 +1,118 @@
+* {
+    font-family: "Segoe UI", "Arial";
+}
+
+QWidget {
+    background-color: #FFF9DF;
+    color: #4A3A00;
+}
+
+HeatTransfer {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                                stop:0 #FFFDF3, stop:1 #F4D76B);
+}
+
+QLabel {
+    background: transparent;
+    font-size: 10pt;
+    font-weight: 600;
+}
+
+QDoubleSpinBox {
+    min-height: 30px;
+    background-color: #FFFFFF;
+    selection-background-color: #FFD84D;
+}
+
+QDoubleSpinBox QLineEdit {
+    padding: 4px 8px;
+    border: 1px solid #D9B52D;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+}
+
+QDoubleSpinBox#heat_capacity QLineEdit {
+    padding: 4px 0px;
+}
+
+QDoubleSpinBox:focus QLineEdit {
+    border: 2px solid #E6B800;
+}
+
+QComboBox {
+    min-height: 30px;
+    padding: 4px 8px;
+    border: 1px solid #D9B52D;
+    border-radius: 8px;
+    background-color: #FFFFFF;
+    selection-background-color: #FFD84D;
+}
+
+QComboBox:focus {
+    border: 2px solid #E6B800;
+}
+
+QPushButton {
+    min-height: 34px;
+    padding: 6px 14px;
+    border: 2px solid #D7A900;
+    border-radius: 10px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #FFE878, stop:1 #F2C930);
+    color: #3D3100;
+    font-size: 11pt;
+    font-weight: 700;
+}
+
+QPushButton:hover {
+    border-color: #A77C00;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #FFF09A, stop:1 #FFD44D);
+}
+
+QPushButton:pressed {
+    background-color: #C99D00;
+}
+
+QPushButton:checked {
+    border-color: #8A6500;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #FFD95A, stop:1 #E1A900);
+}
+
+QSlider::groove:vertical {
+    width: 10px;
+    border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #FFF4B8, stop:1 #D2A900);
+}
+
+QSlider::handle:vertical {
+    height: 22px;
+    margin: 0 -7px;
+    border: 2px solid #B88A00;
+    border-radius: 11px;
+    background: #FFD94A;
+}
+
+QSlider::handle:vertical:hover {
+    background: #FFF08A;
+}
+
+#left_box, #right_box {
+    border: 3px solid #CDA900;
+    border-radius: 18px;
+}
+
+#connection {
+    border: 2px solid #B89000;
+    border-radius: 16px;
+    background-color: lightgray;
+}
+
+QDoubleSpinBox#temperature_box,
+QDoubleSpinBox#temperature_box QLineEdit {
+    background-color: #F2D15B;
+    color: #4A3A00;
+}
+

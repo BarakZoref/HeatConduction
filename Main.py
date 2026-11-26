@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 
 from Body import Body
 from PySide6.QtCore import Qt, QTimer
@@ -23,6 +24,7 @@ class HeatTransfer(QWidget):
         super().__init__()
 
         self.setWindowTitle("Heat Transfer")
+        self.setObjectName("HeatTransfer")
 
         self.about_window = AboutWindow()
 
@@ -49,16 +51,16 @@ class HeatTransfer(QWidget):
         self.left_slider.valueChanged.connect(self.left_temperature_changed)
 
         self.left_box = QLabel()
+        self.left_box.setObjectName("left_box")
         self.left_box.setFixedSize(120, 120)
-        self.left_box.setStyleSheet("border: 2px solid #333; background-color: rgb(0,0,0);")
 
         self.connection = QLabel()
-        self.connection.setFixedSize(200, 32)
-        self.connection.setStyleSheet("border: 2px solid #333; background-color: lightgray;")
+        self.connection.setObjectName("connection")
+        self.connection.setFixedSize(230, 32)
 
         self.right_box = QLabel()
+        self.right_box.setObjectName("right_box")
         self.right_box.setFixedSize(120, 120)
-        self.right_box.setStyleSheet("border: 2px solid #333; background-color:rgb(0,0,0);")
 
         self.right_slider = QSlider(Qt.Orientation.Vertical)
         self.right_slider.setMinimumHeight(140)
@@ -73,6 +75,7 @@ class HeatTransfer(QWidget):
         left_top_layout.addSpacing(12)
         left_top_layout.addWidget(self.left_box)
         left_layout.addLayout(left_top_layout)
+        left_top_layout.setAlignment(Qt.AlignmentFlag.AlignRight)
 
         self.left_temperature = QDoubleSpinBox()
         self.left_temperature.setRange(0,200)
@@ -80,6 +83,7 @@ class HeatTransfer(QWidget):
         self.left_mass.setRange(1,100)
         self.left_mass.setValue(100)
         self.left_heat_capacity = QDoubleSpinBox()
+        self.left_heat_capacity.setObjectName("heat_capacity")
         self.left_heat_capacity.setRange(0.1,999)
         self.left_heat_capacity.setValue(2)
         self.left_temperature_label = QLabel("Temp.")
@@ -94,8 +98,9 @@ class HeatTransfer(QWidget):
             label.setFixedWidth(48)
             label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
 
-        for spin_box in (self.left_temperature, self.left_mass, self.left_heat_capacity):
-            spin_box.setFixedWidth(90)
+        for spin_box in (self.left_temperature, self.left_mass):
+            spin_box.setFixedWidth(140)
+        self.left_heat_capacity.setFixedWidth(140)
 
         left_temperature_row = QHBoxLayout()
         left_temperature_row.setSpacing(4)
@@ -123,13 +128,13 @@ class HeatTransfer(QWidget):
         self.conductivity.setValue(10)
         self.conductivity.setRange(1,100)
         self.conductivity.setSuffix(" J/s\u00b0C")
-        self.conductivity.setFixedWidth(90)
+        self.conductivity.setFixedWidth(160)
         center_layout.addWidget(
             self.conductivity_label, 0, Qt.AlignmentFlag.AlignHCenter
         )
         center_layout.addSpacing(4)
         center_layout.addWidget(self.conductivity, 0, Qt.AlignmentFlag.AlignHCenter)
-        center_layout.addSpacing(12)
+        center_layout.addSpacing(53)
         center_layout.addWidget(self.connection, 0, Qt.AlignmentFlag.AlignHCenter)
 
         self.start_button = QPushButton("Start")
@@ -158,6 +163,7 @@ class HeatTransfer(QWidget):
         right_top_layout.addSpacing(12)
         right_top_layout.addWidget(self.right_slider)
         right_layout.addLayout(right_top_layout)
+        right_top_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.right_temperature = QDoubleSpinBox()
         self.right_temperature.setRange(0,200)
@@ -165,6 +171,7 @@ class HeatTransfer(QWidget):
         self.right_mass.setRange(1,100)
         self.right_mass.setValue(100)
         self.right_heat_capacity = QDoubleSpinBox()
+        self.right_heat_capacity.setObjectName("heat_capacity")
         self.right_heat_capacity.setRange(0.1,999)
         self.right_heat_capacity.setValue(2)
 
@@ -184,9 +191,9 @@ class HeatTransfer(QWidget):
             spin_box.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
 
         for temperature_spin_box in (self.left_temperature, self.right_temperature):
+            temperature_spin_box.setObjectName("temperature_box")
             temperature_spin_box.setReadOnly(True)
             temperature_spin_box.setSuffix(" \u00b0C")
-            temperature_spin_box.setStyleSheet("background-color: lightgray;")
 
         self.right_temperature_label = QLabel("Temp.")
         self.right_mass_label = QLabel("Mass.")
@@ -200,8 +207,9 @@ class HeatTransfer(QWidget):
             label.setFixedWidth(48)
             label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
 
-        for spin_box in (self.right_temperature, self.right_mass, self.right_heat_capacity):
-            spin_box.setFixedWidth(90)
+        for spin_box in (self.right_temperature, self.right_mass):
+            spin_box.setFixedWidth(140)
+        self.right_heat_capacity.setFixedWidth(140)
 
         right_temperature_row = QHBoxLayout()
         right_temperature_row.setSpacing(4)
@@ -227,16 +235,17 @@ class HeatTransfer(QWidget):
         layout.addLayout(right_layout)
 
         self.left_slider.setValue(255)
+        self.right_temperature_changed()
 
     def left_temperature_changed(self):
         value = self.left_slider.value()
         self.left_temperature.setValue(self.slider_value_to_celsius(value))
-        self.left_box.setStyleSheet(f'background-color:rgb({value},0,0)')
+        self.left_box.setStyleSheet(f"background-color: rgb({value}, 0, 0);")
 
     def right_temperature_changed(self):
         value = self.right_slider.value()
         self.right_temperature.setValue(self.slider_value_to_celsius(value))
-        self.right_box.setStyleSheet(f'background-color:rgb({value},0,0)')
+        self.right_box.setStyleSheet(f"background-color: rgb({value}, 0, 0);")
 
     def slider_value_to_celsius(self, value: int) -> float:
         return value * 200 / 255
@@ -279,16 +288,9 @@ class HeatTransfer(QWidget):
         self.time_history.append(self.current_time)
         self.graph_window.update_graph()
 
-        if self.current_time == 10:
+        if self.current_time == 10 or self.left_body.temperature == self.right_body.temperature:
             self.timer.stop()
             self.start_button.setChecked(False)
-
-
-        print(self.body1_temp_history)
-        print(self.body2_temp_history)
-        print(self.time_history)
-
-        print("---------------------")
 
     def reboot_values(self):
         self.body1_temp_history = []
@@ -308,6 +310,9 @@ class HeatTransfer(QWidget):
 
 def main() -> int:
     app = QApplication(sys.argv)
+    theme_path = Path(__file__).resolve().with_name("theme.qss")
+    if theme_path.exists():
+        app.setStyleSheet(theme_path.read_text(encoding="utf-8"))
     window = HeatTransfer()
     window.show()
     return app.exec()

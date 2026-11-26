@@ -9,8 +9,9 @@ class AboutWindow(QWidget):
 
         # 1. Main Window Setup
         self.setWindowTitle("About Me")
+        self.setObjectName("AboutWindow")
         self.setFixedSize(350, 480)
-        self.setStyleSheet('background-color: darkslategray; font-family: Arial')
+        self.setStyleSheet("background-color: darkslategray; font-family: Arial;")
 
         # 2. Profile Image Label
         self.image_label = QLabel(self)
@@ -20,26 +21,39 @@ class AboutWindow(QWidget):
 
         # 3. Name Label
         self.name_label = QLabel("Barak Zoref", self)
+        self.name_label.setObjectName("name_label")
         self.name_label.setGeometry(0, 210, 350, 40)
         self.name_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.name_label.setStyleSheet("color: white; font-size: 26px; font-weight: bold;")
+        self.name_label.setStyleSheet(
+            "color: white; font-size: 26px; font-weight: bold;"
+        )
 
         # 4. Subtitle Label
         self.subtitle_label = QLabel("Mechanical Engineering Student\nAfeka Academic College", self)
+        self.subtitle_label.setObjectName("subtitle_label")
         self.subtitle_label.setGeometry(0, 250, 350, 40)
         self.subtitle_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.subtitle_label.setStyleSheet("color: white; font-size: 15px;")
+        self.subtitle_label.setStyleSheet(
+            "color: white; font-size: 15px; font-weight: normal;"
+        )
 
         # 5. Email Label 
         self.email_label = QLabel("📧 zorefbarak@gmail.com", self)
+        self.email_label.setObjectName("email_label")
         self.email_label.setGeometry(0, 320, 350, 30)
         self.email_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.email_label.setStyleSheet("color: white; font-size: 16px;")
+        self.email_label.setStyleSheet(
+            "color: white; font-size: 16px; font-weight: normal;"
+        )
 
         # 6. LinkedIn Label 
         self.linkedin_label = QLabel('<a href="https://www.linkedin.com/in/barakzoref/" style="color: lightgreen; text-decoration: none; font-size: 15px;">LinkedIn Profile</a>', self)
+        self.linkedin_label.setObjectName("linkedin_label")
         self.linkedin_label.setGeometry(0, 360, 350, 30)
         self.linkedin_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.linkedin_label.setStyleSheet(
+            "font-family: Arial; font-size: 15px; font-weight: normal;"
+        )
         self.linkedin_label.setCursor(Qt.CursorShape.PointingHandCursor)
         self.linkedin_label.setOpenExternalLinks(True)
 
@@ -49,8 +63,12 @@ class AboutWindow(QWidget):
             'GitHub Project</a>',
             self,
         )
+        self.github_label.setObjectName("github_label")
         self.github_label.setGeometry(0, 390, 350, 30)
         self.github_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.github_label.setStyleSheet(
+            "font-family: Arial; font-size: 15px; font-weight: normal;"
+        )
         self.github_label.setCursor(Qt.CursorShape.PointingHandCursor)
         self.github_label.setOpenExternalLinks(True)
 
